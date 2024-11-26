@@ -1,6 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">Healthcare System</a>
+    <a class="navbar-brand ms-auto me-5" routerLink="/">
+      <img src="assets/healthcare-logo.svg" alt="JKL Logo" class="brand-logo">
+      JKL Healthcare
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,42 +12,62 @@
         <!-- Admin Navigation -->
         <ng-container *ngIf="authService.isAdmin()">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/patients" routerLinkActive="active">Patients</a>
+            <a class="nav-link" routerLink="/patients" routerLinkActive="active">
+              <i class="bi bi-people"></i> Patients
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/caregivers" routerLinkActive="active">Caregivers</a>
+            <a class="nav-link" routerLink="/caregivers" routerLinkActive="active">
+              <i class="bi bi-person-badge"></i> Caregivers
+            </a>
           </li>
         </ng-container>
 
         <!-- Caregiver Navigation -->
         <ng-container *ngIf="authService.isCaregiver()">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/caregiver" routerLinkActive="active">Dashboard</a>
+            <a class="nav-link" routerLink="/caregiver" routerLinkActive="active">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/caregiver/patients" routerLinkActive="active">Patients</a>
+            <a class="nav-link" routerLink="/caregiver/patients" routerLinkActive="active">
+              <i class="bi bi-people"></i> Patients
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/caregiver/appointments" routerLinkActive="active">Appointments</a>
+            <a class="nav-link" routerLink="/caregiver/appointments" routerLinkActive="active">
+              <i class="bi bi-calendar-check"></i> Appointments
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/caregiver/profile" routerLinkActive="active">Profile</a>
+            <a class="nav-link" routerLink="/caregiver/profile" routerLinkActive="active">
+              <i class="bi bi-person-circle"></i> Profile
+            </a>
           </li>
         </ng-container>
 
         <!-- Patient Navigation -->
         <ng-container *ngIf="authService.isPatient()">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/patient" routerLinkActive="active">Dashboard</a>
+            <a class="nav-link" routerLink="/patient" routerLinkActive="active">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/patient/appointments" routerLinkActive="active">Appointments</a>
+            <a class="nav-link" routerLink="/patient/appointments" routerLinkActive="active">
+              <i class="bi bi-calendar-check"></i> Appointments
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/patient/profile" routerLinkActive="active">Profile</a>
+            <a class="nav-link" routerLink="/patient/profile" routerLinkActive="active">
+              <i class="bi bi-person-circle"></i> Profile
+            </a>
           </li>
         </ng-container>
       </ul>
