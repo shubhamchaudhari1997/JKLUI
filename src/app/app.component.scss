@@ -1,0 +1,13 @@
+.navbar {
+  margin-bottom: 20px;
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+.nav-link {
+  &.active {
+    font-weight: 500;
+  }
+}

@@ -1,0 +1,165 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+          <h4>Register</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div *ngIf="errorMessage" class="alert alert-danger mb-3">
+              <div *ngFor="let error of errorMessage.split('\n')">
+                {{ error }}
+              </div>
+            </div>
+            <!-- Personal Information -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">First Name*</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [ngClass]="{ 'is-invalid': (f['firstName'].dirty || f['firstName'].touched) && f['firstName'].errors }"
+                  id="firstName" 
+                  formControlName="firstName">
+                <div *ngIf="(f['firstName'].dirty || f['firstName'].touched) && f['firstName'].errors" class="invalid-feedback">
+                  <div *ngIf="f['firstName'].errors['required']">First Name is required</div>
+                  <div *ngIf="f['firstName'].errors['maxlength']">First Name must be less than 50 characters</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Last Name*</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [ngClass]="{ 'is-invalid': (f['lastName'].dirty || f['lastName'].touched) && f['lastName'].errors }"
+                  id="lastName" 
+                  formControlName="lastName">
+                <div *ngIf="(f['lastName'].dirty || f['lastName'].touched) && f['lastName'].errors" class="invalid-feedback">
+                  <div *ngIf="f['lastName'].errors['required']">Last Name is required</div>
+                  <div *ngIf="f['lastName'].errors['maxlength']">Last Name must be less than 50 characters</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email*</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                [ngClass]="{ 'is-invalid': (f['email'].dirty || f['email'].touched) && f['email'].errors }"
+                id="email" 
+                formControlName="email">
+              <div *ngIf="(f['email'].dirty || f['email'].touched) && f['email'].errors" class="invalid-feedback">
+                <div *ngIf="f['email'].errors['required']">Email is required</div>
+                <div *ngIf="f['email'].errors['email']">Invalid email address</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="phoneNumber" class="form-label">Phone Number</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                [ngClass]="{ 'is-invalid': (f['phoneNumber'].dirty || f['phoneNumber'].touched) && f['phoneNumber'].errors }"
+                id="phoneNumber" 
+                formControlName="phoneNumber">
+              <div *ngIf="(f['phoneNumber'].dirty || f['phoneNumber'].touched) && f['phoneNumber'].errors" class="invalid-feedback">
+                <div *ngIf="f['phoneNumber'].errors?.['pattern']">Please enter a valid phone number</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <textarea 
+                class="form-control" 
+                id="address" 
+                formControlName="address"
+                rows="2">
+              </textarea>
+            </div>
+
+            <!-- User Type Selection -->
+            <div class="mb-3">
+              <label for="userType" class="form-label">User Type*</label>
+              <select 
+                class="form-select" 
+                [ngClass]="{ 'is-invalid': (f['userType'].dirty || f['userType'].touched) && f['userType'].errors }"
+                id="userType" 
+                formControlName="userType">
+                <option value="" disabled>Select a user type</option>
+                <option *ngFor="let type of userTypes" [value]="type.id">
+                  {{type.name}}
+                </option>
+              </select>
+              <div *ngIf="(f['userType'].dirty || f['userType'].touched) && f['userType'].errors" class="invalid-feedback">
+                <div *ngIf="f['userType'].errors['required']">User Type is required</div>
+              </div>
+            </div>
+
+            <!-- Specialization (only for caregivers) -->
+            <div class="mb-3" *ngIf="showSpecialization()">
+              <label for="specialization" class="form-label">Specialization*</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [ngClass]="{ 'is-invalid': (f['specialization'].dirty || f['specialization'].touched) && f['specialization'].errors }"
+                id="specialization" 
+                formControlName="specialization">
+              <div *ngIf="(f['specialization'].dirty || f['specialization'].touched) && f['specialization'].errors" class="invalid-feedback">
+                <div *ngIf="f['specialization'].errors['required']">Specialization is required for caregivers</div>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password*</label>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  [ngClass]="{ 'is-invalid': (f['password'].dirty || f['password'].touched) && f['password'].errors }"
+                  id="password" 
+                  formControlName="password">
+                <div *ngIf="(f['password'].dirty || f['password'].touched) && f['password'].errors" class="invalid-feedback">
+                  <div *ngIf="f['password'].errors['required']">Password is required</div>
+                  <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
+                  <div *ngIf="f['password'].errors['maxlength']">Password must be less than 100 characters</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="confirmPassword" class="form-label">Confirm Password*</label>
+                <input 
+                  type="password" 
+                  class="form-control" 
+                  [ngClass]="{ 'is-invalid': (f['confirmPassword'].dirty || f['confirmPassword'].touched) && 
+                    (f['confirmPassword'].errors || registerForm.hasError('mismatch')) }"
+                  id="confirmPassword" 
+                  formControlName="confirmPassword">
+                <div *ngIf="(f['confirmPassword'].dirty || f['confirmPassword'].touched) && 
+                  (f['confirmPassword'].errors || registerForm.hasError('mismatch'))" class="invalid-feedback">
+                  <div *ngIf="f['confirmPassword'].errors?.['required']">Confirm Password is required</div>
+                  <div *ngIf="registerForm.hasError('mismatch')">Passwords do not match</div>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              class="btn btn-primary w-100 mb-3"
+              [disabled]="registerForm.invalid || registerForm.hasError('mismatch')">
+              Register
+            </button>
+            
+            <div class="text-center">
+              <p class="mb-0">Already have an account? 
+                <a routerLink="/login" class="text-primary">Login here</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

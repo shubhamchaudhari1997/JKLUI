@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="card-title mb-0">Availability Status</h5>
+      <span class="badge" [ngClass]="isAvailable ? 'bg-success' : 'bg-danger'">
+        {{ isAvailable ? 'Available' : 'Not Available' }}
+      </span>
+    </div>
+    <div class="form-check form-switch">
+      <input 
+        class="form-check-input" 
+        type="checkbox" 
+        id="availabilityToggle"
+        [checked]="isAvailable"
+        (change)="toggleAvailability()"
+        [disabled]="loading">
+      <label class="form-check-label" for="availabilityToggle">
+        {{ loading ? 'Updating...' : (isAvailable ? 'Available for Assignments' : 'Not Available for Assignments') }}
+      </label>
+    </div>
+  </div>
+</div> 

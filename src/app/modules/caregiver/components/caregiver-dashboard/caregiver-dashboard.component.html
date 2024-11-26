@@ -1,0 +1,68 @@
+<div class="container mt-4">
+  <div class="dashboard-header">
+    <h2>Welcome, {{ caregiverName }}</h2>
+    <button class="btn btn-outline-primary" (click)="loadDashboardStats()" [disabled]="loading">
+      <i class="bi" [ngClass]="loading ? 'bi-arrow-repeat spin' : 'bi-arrow-clockwise'"></i> 
+      {{ loading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="row mt-4" [class.loading]="loading">
+    <!-- Assigned Patients -->
+    <div class="col-md-4 mb-4">
+      <div class="card dashboard-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-subtitle mb-2 text-muted">Assigned Patients</h6>
+              <h2 class="card-title mb-0">{{ stats.assignedPatients }}</h2>
+            </div>
+            <div class="icon-container bg-primary">
+              <i class="bi bi-people-fill"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Appointments -->
+    <div class="col-md-4 mb-4">
+      <div class="card dashboard-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-subtitle mb-2 text-muted">Total Appointments</h6>
+              <h2 class="card-title mb-0">{{ stats.totalAppointments }}</h2>
+            </div>
+            <div class="icon-container bg-success">
+              <i class="bi bi-calendar-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's Appointments -->
+    <div class="col-md-4 mb-4">
+      <div class="card dashboard-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-subtitle mb-2 text-muted">Today's Appointments</h6>
+              <h2 class="card-title mb-0">{{ stats.todayAppointments }}</h2>
+            </div>
+            <div class="icon-container bg-warning">
+              <i class="bi bi-calendar-day"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <app-caregiver-availability></app-caregiver-availability>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,33 @@
+.card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  padding: 1.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.btn-primary {
+  padding: 0.8rem;
+  font-weight: 500;
+}
+
+.input-group {
+  .btn {
+    border-color: #ced4da;
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+  
+  .bi {
+    font-size: 1.2rem;
+  }
+}
+
+.form-control:focus + .btn {
+  border-color: #86b7fe;
+} 

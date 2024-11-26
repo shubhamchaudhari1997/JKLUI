@@ -1,0 +1,95 @@
+.card {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card-title {
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .card-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+  }
+} 
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.icon-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    color: white;
+    font-size: 1.5rem;
+  }
+}
+
+.card-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Loading state
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.spin {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.dashboard-card {
+  min-height: 120px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+} 

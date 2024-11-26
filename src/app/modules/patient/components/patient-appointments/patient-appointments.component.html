@@ -1,0 +1,128 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Schedule New Appointment</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="appointmentDate" class="form-label required">Appointment Date</label>
+              <input 
+                type="datetime-local" 
+                class="form-control" 
+                id="appointmentDate" 
+                formControlName="appointmentDate"
+                [min]="getMinDate()"
+                [ngClass]="{'is-invalid': appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched}">
+              <div class="invalid-feedback">Please select a valid date and time</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="notes" class="form-label">Notes</label>
+              <textarea 
+                class="form-control" 
+                id="notes" 
+                formControlName="notes"
+                rows="3"
+                placeholder="Any specific requirements or notes...">
+              </textarea>
+            </div>
+
+            <div class="d-grid">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="appointmentForm.invalid || loading || !caregiverDetails">
+                <i class="bi bi-calendar-plus"></i>
+                {{ loading ? 'Scheduling...' : 'Schedule Appointment' }}
+              </button>
+            </div>
+
+            <div *ngIf="!caregiverDetails" class="alert alert-warning mt-3">
+              <i class="bi bi-exclamation-triangle"></i>
+              You need to be assigned to a caregiver before scheduling appointments.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">My Appointments</h5>
+          <button 
+            class="btn btn-outline-light btn-sm" 
+            (click)="currentPatientId && loadAppointments(currentPatientId)" 
+            [disabled]="loading || !currentPatientId">
+            <i class="bi" [ngClass]="loading ? 'bi-arrow-repeat spin' : 'bi-arrow-clockwise'"></i>
+            Refresh
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Caregiver</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let appointment of appointments">
+                  <td>{{ appointment.appointmentDate | date:'medium' }}</td>
+                  <td>{{ appointment.caregiverName }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'bg-success': appointment.status === 'Confirmed',
+                      'bg-warning': appointment.status === 'Pending',
+                      'bg-danger': appointment.status === 'Cancelled'
+                    }">
+                      {{ appointment.status }}
+                    </span>
+                  </td>
+                  <td>{{ appointment.notes || 'No notes' }}</td>
+                  <td>
+                    <button 
+                      class="btn btn-sm btn-outline-danger"
+                      (click)="openCancelModal(appointment)"
+                      [disabled]="appointment.status === 'Cancelled' || loading">
+                      <i class="bi bi-x-circle"></i> Cancel
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="appointments.length === 0">
+                  <td colspan="5" class="text-center py-3">No appointments found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="cancelModalLabel">Confirm Cancellation</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to cancel this appointment?</p>
+        <p class="text-danger mb-0"><small>This action cannot be undone.</small></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Keep it</button>
+        <button type="button" class="btn btn-danger" (click)="confirmCancel()">Yes, Cancel it</button>
+      </div>
+    </div>
+  </div>
+</div> 

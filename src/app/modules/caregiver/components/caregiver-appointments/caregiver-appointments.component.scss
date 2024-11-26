@@ -1,0 +1,22 @@
+.table {
+  margin-bottom: 0;
+}
+
+.badge {
+  padding: 0.5em 0.8em;
+}
+
+.btn-sm {
+  i {
+    margin-right: 0.25rem;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+} 

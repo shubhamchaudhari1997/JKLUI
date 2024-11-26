@@ -1,0 +1,62 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">Healthcare System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <!-- Admin Navigation -->
+        <ng-container *ngIf="authService.isAdmin()">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/patients" routerLinkActive="active">Patients</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/caregivers" routerLinkActive="active">Caregivers</a>
+          </li>
+        </ng-container>
+
+        <!-- Caregiver Navigation -->
+        <ng-container *ngIf="authService.isCaregiver()">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/caregiver" routerLinkActive="active">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/caregiver/patients" routerLinkActive="active">Patients</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/caregiver/appointments" routerLinkActive="active">Appointments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/caregiver/profile" routerLinkActive="active">Profile</a>
+          </li>
+        </ng-container>
+
+        <!-- Patient Navigation -->
+        <ng-container *ngIf="authService.isPatient()">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/patient" routerLinkActive="active">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/patient/appointments" routerLinkActive="active">Appointments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/patient/profile" routerLinkActive="active">Profile</a>
+          </li>
+        </ng-container>
+      </ul>
+
+      <!-- Logout Button -->
+      <div class="ms-auto" *ngIf="authService.isLoggedIn()">
+        <button class="btn btn-outline-light" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

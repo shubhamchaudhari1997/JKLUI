@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <div class="dashboard-header">
+    <h2>Welcome, {{ patientName }}</h2>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">My Caregiver</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="caregiverDetails">
+            <p class="mb-1"><strong>Name:</strong> {{ caregiverName }}</p>
+            <p class="mb-0"><strong>Specialization:</strong> {{ caregiverSpecialization }}</p>
+          </div>
+          <p *ngIf="!caregiverDetails" class="mb-0 text-muted">No caregiver assigned</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Medical Information</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong>Medical Record:</strong> {{ patientDetails?.medicalRecord || 'No records available' }}</p>
+          <p class="mb-0"><strong>Date of Birth:</strong> {{ patientDetails?.dateOfBirth | date:'mediumDate' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Recent Notes</h5>
+          <button *ngIf="currentPatientId" 
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="loadPatientNotes(currentPatientId)">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+          </button>
+        </div>
+        <div class="card-body">
+          <div *ngIf="notes.length > 0">
+            <div *ngFor="let note of notes" class="mb-3">
+              <p class="mb-1">{{ note.noteContent }}</p>
+              <small class="text-muted">{{ note.createdAt | date:'medium' }}</small>
+            </div>
+          </div>
+          <p *ngIf="notes.length === 0" class="mb-0 text-muted">No notes available</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

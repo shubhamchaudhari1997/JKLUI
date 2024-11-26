@@ -1,0 +1,84 @@
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.icon-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    color: white;
+    font-size: 1.5rem;
+  }
+}
+
+.card-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.spin {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.nav-pills {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  .nav-link {
+    color: #495057;
+    margin: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    
+    &:hover {
+      background-color: #e9ecef;
+    }
+    
+    &.active {
+      background-color: var(--bs-primary);
+      color: white;
+    }
+    
+    i {
+      font-size: 1.1rem;
+    }
+  }
+} 

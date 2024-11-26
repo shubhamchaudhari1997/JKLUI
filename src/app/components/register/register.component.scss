@@ -1,0 +1,33 @@
+.card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  padding: 1.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.btn-primary {
+  padding: 0.8rem;
+  font-weight: 500;
+}
+
+.form-label::after {
+  content: "*";
+  color: red;
+  margin-left: 4px;
+}
+
+.form-label:not([for="phoneNumber"]):not([for="address"])::after {
+  content: "*";
+  color: red;
+  margin-left: 4px;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+} 

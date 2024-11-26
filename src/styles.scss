@@ -1,0 +1,16 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'ngx-toastr/toastr';
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  margin-top: 20px;
+}
+
+.nav-link.active {
+  font-weight: bold;
+}

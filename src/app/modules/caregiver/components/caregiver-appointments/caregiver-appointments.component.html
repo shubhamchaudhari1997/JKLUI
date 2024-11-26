@@ -1,0 +1,90 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Appointments</h5>
+      <button 
+        class="btn btn-outline-light btn-sm" 
+        (click)="loadAppointments(userId)" 
+        [disabled]="loading">
+        <i class="bi" [ngClass]="loading ? 'bi-arrow-repeat spin' : 'bi-arrow-clockwise'"></i>
+        Refresh
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Patient</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let appointment of appointments">
+              <td>{{ appointment.appointmentDate | date:'medium' }}</td>
+              <td>{{ appointment.patientName }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-success': appointment.status === 'Confirmed',
+                  'bg-warning': appointment.status === 'Pending',
+                  'bg-danger': appointment.status === 'Rejected'
+                }">
+                  {{ appointment.status }}
+                </span>
+              </td>
+              <td>{{ appointment.notes || 'No notes' }}</td>
+              <td>
+                <button 
+                  *ngIf="appointment.status === 'Pending'"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="openStatusModal(appointment)"
+                  [disabled]="loading">
+                  <i class="bi bi-check2-circle"></i> Review
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="appointments.length === 0">
+              <td colspan="5" class="text-center py-3">No appointments found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Status Update Modal -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="statusModalLabel">Update Appointment Status</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please review the appointment request:</p>
+        <div class="mb-3">
+          <strong>Patient:</strong> {{ selectedAppointment?.patientName }}
+        </div>
+        <div class="mb-3">
+          <strong>Date & Time:</strong> {{ selectedAppointment?.appointmentDate | date:'medium' }}
+        </div>
+        <div class="mb-3">
+          <strong>Notes:</strong> {{ selectedAppointment?.notes || 'No notes' }}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="updateStatus('Confirmed')" [disabled]="loading">
+          <i class="bi bi-check-circle"></i> Confirm
+        </button>
+        <button type="button" class="btn btn-danger" (click)="updateStatus('Rejected')" [disabled]="loading">
+          <i class="bi bi-x-circle"></i> Reject
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,93 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Patients</h2>
+    <button class="btn btn-outline-primary" (click)="loadPatients()" [disabled]="loading">
+      <i class="bi" [ngClass]="loading ? 'bi-arrow-repeat spin' : 'bi-arrow-clockwise'"></i>
+      {{ loading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Date of Birth</th>
+          <th>Address</th>
+          <th>Medical Record</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let patient of patients; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ patient.name }}</td>
+          <td>{{ patient.dateOfBirth | date:'mediumDate' }}</td>
+          <td>{{ patient.address || 'N/A' }}</td>
+          <td>
+            <span *ngIf="patient.medicalRecord" class="text-truncate d-inline-block" style="max-width: 200px;" 
+                  [title]="patient.medicalRecord">
+              {{ patient.medicalRecord }}
+            </span>
+            <span *ngIf="!patient.medicalRecord">No records</span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary me-2" 
+                      title="Edit" 
+                      [routerLink]="['/caregiver/patients/edit', patient.patientId]">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-info me-2" 
+                      title="Add Note"
+                      (click)="openAddNoteModal(patient)">
+                <i class="bi bi-journal-plus"></i>
+                <span class="badge bg-info ms-1" *ngIf="(patient.notes || []).length > 0">
+                  {{ (patient.notes || []).length }}
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="patients.length === 0 && !loading">
+          <td colspan="6" class="text-center py-3">No patients assigned</td>
+        </tr>
+        <tr *ngIf="loading">
+          <td colspan="6" class="text-center py-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Note Modal -->
+  <div class="modal fade" id="addNoteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addNoteModalLabel">Add Note for {{ selectedPatient?.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <textarea 
+            class="form-control" 
+            rows="3" 
+            [(ngModel)]="newNote"
+            placeholder="Enter your note here..."
+            [disabled]="loading">
+          </textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" [disabled]="loading">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="addNote()" [disabled]="!newNote?.trim() || loading">
+            {{ loading ? 'Adding...' : 'Add Note' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

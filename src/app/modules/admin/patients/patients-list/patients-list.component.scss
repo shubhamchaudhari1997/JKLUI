@@ -1,0 +1,38 @@
+.table {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.btn-group {
+  .btn {
+    padding: 0.25rem 0.5rem;
+    
+    i {
+      font-size: 1rem;
+    }
+  }
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25em 0.5em;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spin {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+} 
