@@ -74,8 +74,8 @@ export interface AppointmentRequest {
   providedIn: 'root'
 })
 export class PatientService {
-  private apiUrl = `${environment.apiUrl}/api/Patient`;
-  private appointmentUrl = `https://localhost:7263/api/Appointment`;
+  private apiUrl = `${environment.apiUrl}/Patient`;
+  private appointmentUrl = `${environment.apiUrl}/Appointment`;
 
   constructor(private http: HttpClient) { }
 

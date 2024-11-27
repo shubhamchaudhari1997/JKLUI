@@ -15,7 +15,7 @@ export interface AppointmentRequest {
   providedIn: 'root'
 })
 export class AppointmentService {
-  private apiUrl = `${environment.apiUrl}/api/Appointment`;
+  private apiUrl = `${environment.apiUrl}/Appointment`;
 
   constructor(private http: HttpClient) { }
 

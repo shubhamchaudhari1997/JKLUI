@@ -47,7 +47,7 @@ export interface UpdateAvailabilityDto {
   providedIn: 'root'
 })
 export class CaregiverService {
-  private apiUrl = `${environment.apiUrl}/api/Caregiver`;
+  private apiUrl = `${environment.apiUrl}/Caregiver`;
   private appointmentUrl = `${environment.apiUrl}/api/Appointment`;
   private currentCaregiverId: number | null = null;
 
