@@ -2,34 +2,33 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AuthResponse } from '../models/auth.model';
-import { AuthService } from './auth.service';
 
 export interface RegistrationData {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  confirmPassword: string;
-  phoneNumber?: string;
-  address?: string;
+  phoneNumber: string;
+  address: string;
   userType: number;
   specialization?: string;
-  isActive: boolean;
-  createdAt: Date;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegistrationService {
-  private apiUrl = `${environment.apiUrl}/api/Auth/register`;
+  private apiUrl: string;
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {
+    this.apiUrl = `${environment.apiUrl}/Auth`;
+    console.log('API URL in Registration Service:', this.apiUrl);
+  }
 
-  register(userData: RegistrationData): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.apiUrl, userData);
+  register(registrationData: RegistrationData): Observable<any> {
+    const url = `${this.apiUrl}/register`;
+    console.log('Full Registration URL:', url);
+    console.log('Environment:', environment);
+    return this.http.post(url, registrationData);
   }
 } 

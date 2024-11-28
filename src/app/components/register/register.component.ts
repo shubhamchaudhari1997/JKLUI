@@ -3,10 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RegistrationService, RegistrationData } from '../../services/registration.service';
-import { catchError, tap, finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { AuthResponse } from '../../models/auth.model';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../environments/environment';
 
 enum UserType {
   Administrator = 0,
@@ -21,142 +19,101 @@ enum UserType {
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+  loading = false;
   submitted = false;
-  errorMessage: string = '';
-
+  errorMessage = '';
   userTypes = [
-    { id: 0, name: 'Administrator' },
-    { id: 1, name: 'Caregiver' },
-    { id: 2, name: 'Patient' }
+    { id: '1', name: 'Caregiver' },
+    { id: '2', name: 'Patient' }
   ];
 
   constructor(
-    private formBuilder: FormBuilder,
-    private registrationService: RegistrationService,
+    private fb: FormBuilder,
     private router: Router,
+    private registrationService: RegistrationService,
     private toastr: ToastrService
   ) {
-    this.registerForm = this.formBuilder.group({
+    this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: [''],
-      address: [''],
-      userType: [2, Validators.required],
-      specialization: [{value: '', disabled: true}],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(100)
-      ]],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validator: this.passwordMatchValidator
-    });
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
+      confirmPassword: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]],
+      address: ['', Validators.required],
+      userType: ['2', Validators.required],  // Default to Patient
+      specialization: [{ value: '', disabled: true }]
+    }, { validator: this.passwordMatchValidator });
+  }
 
-    // Subscribe to userType changes to handle specialization field
+  ngOnInit() {
+    // Watch for userType changes to handle specialization field
     this.registerForm.get('userType')?.valueChanges.subscribe(value => {
-      console.log('UserType changed to:', value); // Debug log
       const specializationControl = this.registerForm.get('specialization');
-      if (Number(value) === UserType.Caregiver) { // Convert value to number and compare
-        console.log('Enabling specialization field'); // Debug log
+      if (value === '1') { // Caregiver
         specializationControl?.enable();
         specializationControl?.setValidators([Validators.required]);
       } else {
-        console.log('Disabling specialization field'); // Debug log
         specializationControl?.disable();
         specializationControl?.clearValidators();
-        specializationControl?.setValue('');
       }
       specializationControl?.updateValueAndValidity();
     });
   }
 
-  ngOnInit() {
-    // Initialize specialization state based on initial userType
-    const userType = this.registerForm.get('userType')?.value;
-    const specializationControl = this.registerForm.get('specialization');
-    if (Number(userType) === UserType.Caregiver) { // Convert value to number and compare
-      specializationControl?.enable();
-      specializationControl?.setValidators([Validators.required]);
-    } else {
-      specializationControl?.disable();
-      specializationControl?.clearValidators();
-    }
-    specializationControl?.updateValueAndValidity();
-  }
-
+  // Custom validator for password matching
   passwordMatchValidator(g: FormGroup) {
     return g.get('password')?.value === g.get('confirmPassword')?.value
-      ? null : {'mismatch': true};
+      ? null : { 'mismatch': true };
   }
 
-  get f() { return this.registerForm.controls; }
-
+  // Helper method to check if specialization should be shown
   showSpecialization(): boolean {
-    return Number(this.registerForm.get('userType')?.value) === UserType.Caregiver; // Convert value to number and compare
+    return this.registerForm.get('userType')?.value === '1';
   }
+
+  // Getter for easy access to form fields
+  get f() { return this.registerForm.controls; }
 
   onSubmit() {
     this.submitted = true;
-    this.errorMessage = '';
 
     if (this.registerForm.invalid) {
       return;
     }
 
+    this.loading = true;
     const formValues = this.registerForm.getRawValue();
+    
     const registrationData: RegistrationData = {
-      ...formValues,
-      userType: Number(formValues.userType),
-      isActive: true,
-      createdAt: new Date()
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
+      email: formValues.email,
+      password: formValues.password,
+      phoneNumber: formValues.phoneNumber,
+      address: formValues.address,
+      userType: parseInt(formValues.userType),
+      specialization: formValues.specialization
     };
 
-    this.registrationService.register(registrationData)
-      .pipe(
-        tap(response => {
-          debugger;
-          console.log('Registration API Response:', response);
-        }),
-        catchError(error => {
-          debugger;
-          console.error('Registration API Error:', error);
-          
-          if (error.error instanceof ErrorEvent) {
-            this.toastr.error('An error occurred: ' + error.error.message);
-          } else {
-            if (error.error?.errors) {
-              this.toastr.error(Object.values(error.error.errors).join('\n'));
-            } else if (error.error?.message) {
-              this.toastr.error(error.error.message);
-            } else {
-              this.toastr.error(`Error Code: ${error.status}\nMessage: ${error.message}`);
-            }
-          }
-          return of(null);
-        })
-      )
-      .subscribe((response: AuthResponse | null) => {
-        debugger;
-        if (response && response.isSuccess) {
-          console.log('Registration successful:', response);
-          
-          // Show success message using toastr
-          this.toastr.success('Registration successful! Please login with your credentials.', 'Success');
-          
-          // Clear the form
-          this.registerForm.reset();
-          this.submitted = false;
-          
-          // Navigate to login page after a short delay
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 1500);
-        } else if (response) {
-          console.log('Registration failed:', response);
-          this.toastr.error(response.message || 'Registration failed. Please try again.');
-        }
-      });
+    console.log('Registration URL:', `${environment.apiUrl}/Auth/register`);
+    console.log('Registration Data:', registrationData);
+
+    this.registrationService.register(registrationData).subscribe({
+      next: () => {
+        this.toastr.success('Registration successful');
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Registration error:', error);
+        this.toastr.error(error.error?.message || 'Registration failed');
+        this.loading = false;
+      }
+    });
+  }
+
+  // Navigate to login page
+  onCancel() {
+    this.router.navigate(['/login']);
   }
 } 
