@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CaregiverService, Caregiver } from '../../../../services/caregiver.service';
+import { CaregiverService } from '../../../../services/caregiver.service';
 import { ToastrService } from 'ngx-toastr';
-import { HttpErrorResponse } from '@angular/common/http';
-
 declare var bootstrap: any;
 
 @Component({
@@ -11,9 +9,9 @@ declare var bootstrap: any;
   styleUrls: ['./caregivers-list.component.scss']
 })
 export class CaregiversListComponent implements OnInit {
-  caregivers: Caregiver[] = [];
+  caregivers: any[] = [];
   loading = false;
-  selectedCaregiver: Caregiver | null = null;
+  selectedCaregiver: any = null;
   deleteModal: any;
 
   constructor(
@@ -23,19 +21,22 @@ export class CaregiversListComponent implements OnInit {
 
   ngOnInit() {
     this.loadCaregivers();
-    // Initialize the modal
-    this.deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    setTimeout(() => {
+      this.deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'), {
+        backdrop: false,
+        keyboard: true
+      });
+    });
   }
 
   loadCaregivers() {
     this.loading = true;
     this.caregiverService.getCaregivers().subscribe({
-      next: (data) => {
-        console.log('Caregivers loaded:', data);
-        this.caregivers = data;
+      next: (caregivers) => {
+        this.caregivers = caregivers;
         this.loading = false;
       },
-      error: (error: HttpErrorResponse) => {
+      error: (error) => {
         console.error('Error loading caregivers:', error);
         this.toastr.error('Failed to load caregivers');
         this.loading = false;
@@ -43,37 +44,25 @@ export class CaregiversListComponent implements OnInit {
     });
   }
 
-  openDeleteConfirmation(caregiver: Caregiver) {
+  openDeleteConfirmation(caregiver: any) {
     this.selectedCaregiver = caregiver;
     this.deleteModal.show();
   }
 
-  cancelDelete() {
-    this.selectedCaregiver = null;
-    this.deleteModal.hide();
-  }
-
   confirmDelete() {
     if (!this.selectedCaregiver) return;
-
+    
     this.loading = true;
     this.caregiverService.deleteCaregiver(this.selectedCaregiver.caregiverId).subscribe({
       next: () => {
-        this.toastr.success(`Caregiver ${this.selectedCaregiver?.name} deleted successfully`);
+        this.toastr.success('Caregiver deleted successfully');
+        this.deleteModal.hide();
         this.loadCaregivers();
-        this.deleteModal.hide();
-        this.selectedCaregiver = null;
       },
-      error: (error: HttpErrorResponse) => {
+      error: (error) => {
         console.error('Error deleting caregiver:', error);
-        if (error.status === 409) {
-          this.toastr.error('Cannot delete caregiver with assigned patients');
-        } else {
-          this.toastr.error('Failed to delete caregiver');
-        }
+        this.toastr.error('Failed to delete caregiver');
         this.loading = false;
-        this.deleteModal.hide();
-        this.selectedCaregiver = null;
       }
     });
   }

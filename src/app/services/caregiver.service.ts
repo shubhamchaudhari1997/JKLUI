@@ -107,7 +107,6 @@ export class CaregiverService {
     const storedId = localStorage.getItem('caregiverId');
     return storedId ? Number(storedId) : null;
   }
-
   addCaregiverNote(note: CreateNoteRequest): Observable<any> {
     debugger;
     const url = `${environment.apiUrl}/CaregiverNotes/CreateCaregiverNote`;
