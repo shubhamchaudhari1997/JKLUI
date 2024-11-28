@@ -1,5 +1,10 @@
+.login-container {
+  margin-top: 5vh;
+}
+
 .card {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -30,4 +35,26 @@
 
 .form-control:focus + .btn {
   border-color: #86b7fe;
+}
+
+.text-muted {
+  a {
+    &:hover {
+      text-decoration: underline !important;
+    }
+  }
+}
+
+.mt-3 {
+  a {
+    &:hover {
+      color: var(--bs-primary) !important;
+    }
+  }
+}
+
+@media (max-height: 600px) {
+  .login-container {
+    margin-top: 2vh;
+  }
 } 

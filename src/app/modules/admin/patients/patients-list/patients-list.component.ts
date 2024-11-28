@@ -4,6 +4,7 @@ import { CaregiverService, Caregiver } from '../../../../services/caregiver.serv
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { forkJoin, catchError, of, tap } from 'rxjs';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-patients-list',
@@ -14,6 +15,8 @@ export class PatientsListComponent implements OnInit {
   patients: Patient[] = [];
   caregivers: Caregiver[] = [];
   loading = false;
+  selectedPatient: Patient | null = null;
+  deleteModal: any;
 
   constructor(
     private patientService: PatientService,
@@ -23,6 +26,36 @@ export class PatientsListComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    this.initializeModal();
+  }
+
+  initializeModal() {
+    setTimeout(() => {
+      this.deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    });
+  }
+
+  openDeleteModal(patient: Patient) {
+    this.selectedPatient = patient;
+    this.deleteModal.show();
+  }
+
+  confirmDelete() {
+    if (!this.selectedPatient) return;
+
+    this.loading = true;
+    this.patientService.deletePatient(this.selectedPatient.patientId).subscribe({
+      next: () => {
+        this.toastr.success('Patient deleted successfully');
+        this.deleteModal.hide();
+        this.loadData();
+      },
+      error: (error) => {
+        console.error('Error deleting patient:', error);
+        this.toastr.error('Failed to delete patient');
+        this.loading = false;
+      }
+    });
   }
 
   loadData() {

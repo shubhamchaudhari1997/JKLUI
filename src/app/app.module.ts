@@ -13,12 +13,14 @@ import { RegisterComponent } from './components/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { RoleGuard } from './services/role.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,

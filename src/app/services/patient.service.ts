@@ -105,8 +105,13 @@ export class PatientService {
   }
 
   // Delete patient (for admin)
+  // deletePatient(id: number): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/${id}`);
+  // }
+
   deletePatient(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete(url);
   }
 
   // Assign caregiver to patient (for admin)

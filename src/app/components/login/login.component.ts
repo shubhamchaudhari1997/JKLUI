@@ -1,51 +1,53 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  loginData = {
-    email: '',
-    password: ''
-  };
+export class LoginComponent implements OnInit {
+  loginForm: FormGroup;
   loading = false;
   showPassword = false;
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
-    private toastr: ToastrService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private toastr: ToastrService
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   onSubmit() {
-    if (!this.loginData.email || !this.loginData.password) {
-      this.toastr.error('Please enter both email and password');
+    if (this.loginForm.invalid) {
       return;
     }
 
     this.loading = true;
-    console.log('Attempting login with:', this.loginData);
+    const { email, password } = this.loginForm.value;
 
-    this.authService.login(this.loginData.email, this.loginData.password).subscribe({
+    this.authService.login(email, password).subscribe({
       next: (response) => {
-        console.log('Login response:', response);
-        if (response.isSuccess) {
-          // Navigation is handled in auth service
-        } else {
-          this.toastr.error(response.message || 'Login failed');
-        }
+        this.loading = false;
+        this.router.navigate([this.getRedirectUrl(response.userType)]);
       },
       error: (error) => {
         console.error('Login error:', error);
-        this.toastr.error(error.error?.message || 'Login failed');
-        this.loading = false;
-      },
-      complete: () => {
+        this.toastr.error(error.error?.message || 'Invalid credentials');
         this.loading = false;
       }
     });
@@ -53,5 +55,14 @@ export class LoginComponent {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  private getRedirectUrl(userType: number): string {
+    switch (userType) {
+      case 0: return '/dashboard';  // Admin
+      case 1: return '/caregiver';  // Caregiver
+      case 2: return '/patient';    // Patient
+      default: return '/login';
+    }
   }
 } 
