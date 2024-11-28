@@ -8,6 +8,7 @@ export interface RegistrationData {
   lastName: string;
   email: string;
   password: string;
+  confirmPassword:string;
   phoneNumber: string;
   address: string;
   userType: number;

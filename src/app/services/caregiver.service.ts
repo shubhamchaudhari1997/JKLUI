@@ -48,7 +48,7 @@ export interface UpdateAvailabilityDto {
 })
 export class CaregiverService {
   private apiUrl = `${environment.apiUrl}/Caregiver`;
-  private appointmentUrl = `${environment.apiUrl}/api/Appointment`;
+  private appointmentUrl = `${environment.apiUrl}/Appointment`;
   private currentCaregiverId: number | null = null;
 
   constructor(private http: HttpClient) { }
@@ -110,7 +110,7 @@ export class CaregiverService {
 
   addCaregiverNote(note: CreateNoteRequest): Observable<any> {
     debugger;
-    const url = `${environment.apiUrl}/api/CaregiverNotes/CreateCaregiverNote`;
+    const url = `${environment.apiUrl}/CaregiverNotes/CreateCaregiverNote`;
     
     const caregiverId = this.getCurrentCaregiverId();
     if (!caregiverId) {

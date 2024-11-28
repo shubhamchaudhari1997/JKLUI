@@ -23,10 +23,10 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   errorMessage = '';
   userTypes = [
-    { id: '1', name: 'Caregiver' },
-    { id: '2', name: 'Patient' }
+    { id: 0, name: 'Administrator' },
+    { id: 1, name: 'Caregiver' },
+    { id: 2, name: 'Patient' }
   ];
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -90,6 +90,7 @@ export class RegisterComponent implements OnInit {
       lastName: formValues.lastName,
       email: formValues.email,
       password: formValues.password,
+      confirmPassword:formValues.confirmPassword,
       phoneNumber: formValues.phoneNumber,
       address: formValues.address,
       userType: parseInt(formValues.userType),

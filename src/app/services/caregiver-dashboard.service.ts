@@ -25,7 +25,7 @@ export interface CaregiverDashboardResponse {
   providedIn: 'root'
 })
 export class CaregiverDashboardService {
-  private apiUrl = `${environment.apiUrl}/api/Caregiver`;
+  private apiUrl = `${environment.apiUrl}/Caregiver`;
 
   constructor(
     private http: HttpClient,

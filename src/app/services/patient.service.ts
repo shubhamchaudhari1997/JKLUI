@@ -116,7 +116,7 @@ export class PatientService {
 
   // Add caregiver note
   addCaregiverNote(note: CreateNoteRequest): Observable<any> {
-    const url = `${environment.apiUrl}/api/CaregiverNotes/CreateCaregiverNote`;
+    const url = `${environment.apiUrl}/CaregiverNotes/CreateCaregiverNote`;
     return this.http.post(url, note);
   }
 
@@ -128,7 +128,7 @@ export class PatientService {
   // Create new appointment
   createAppointment(appointment: AppointmentRequest): Observable<any> {
     debugger;
-    const url = `https://localhost:7263/api/Appointment/PostAppointment`;
+    const url = `https://jkl-healthcare-api.azurewebsites.net/api/Appointment/PostAppointment`;
     
     const appointmentRequest = {
       appointmentDate: appointment.appointmentDate,
